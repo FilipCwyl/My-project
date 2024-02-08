@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour
     public Transform Target;
 
     [Tooltip("Maximum distance between the camera and Target")]
-    public float Distance = 2;
+    public float Distance = 5;
 
     [Tooltip("Distance lerp factor")]
     [Range(.0f, 1.0f)]
@@ -39,10 +39,10 @@ public class CameraController : MonoBehaviour
     [System.Serializable]
     public struct LimitsInfo
     {
-        [Tooltip("Minimum pitch angle, in the range [-90, Maximum]")]
+        [Tooltip("Minimum pitch angle, in the range [-360, Maximum]")]
         public float Minimum;
 
-        [Tooltip("Maximum pitch angle, in the range [Minimum, 90]")]
+        [Tooltip("Maximum pitch angle, in the range [Minimum, 360]")]
         public float Maximum;
     }
 

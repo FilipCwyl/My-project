@@ -52,7 +52,7 @@ public class RocinanteController : MonoBehaviour
         HandleDriftInput(KeyCode.W, Vector3.forward);
         HandleDriftInput(KeyCode.S, Vector3.back);
 
-        /*
+        
         // Nowe sterowanie
         if (Input.GetMouseButton(1))
         {
@@ -60,7 +60,7 @@ public class RocinanteController : MonoBehaviour
             Vector3 rotationMouse = new Vector3(-mouseY, mouseX, 0f) * rotationSpeed;
             transform.Rotate(rotationMouse);
         }
-        */
+        
 
         // Kierowanie si³¹ ci¹gu epstaina
         if (Input.GetKeyDown(KeyCode.Space))

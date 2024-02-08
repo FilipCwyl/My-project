@@ -17949,7 +17949,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 564402925023045351, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 564402925023045351, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
       propertyPath: m_LocalScale.y
@@ -17957,7 +17957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 564402925023045351, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.1281223
+      value: 0.89
       objectReference: {fileID: 0}
     - target: {fileID: 564402925023045351, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18004,7 +18004,8 @@ PrefabInstance:
       value: Ship
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1835486144304668134, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba4dfd2e488417c4e81c7437a3be414b, type: 3}
