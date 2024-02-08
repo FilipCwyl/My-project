@@ -59,8 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\NewBehaviourScript.cs" />
+    <Compile Include="Assets\Scripts\PlayerTracker.cs" />
     <Compile Include="Assets\Scripts\ShipControl.cs" />
-    <Compile Include="Assets\Scripts\CameraControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -32,12 +32,14 @@ public class RocinanteController : MonoBehaviour
 
     void HandleUserInput()
     {
+        
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
         // Obrót statku
         Vector3 rotation = new Vector3(-mouseY, mouseX, 0f) * rotationSpeed;
         transform.Rotate(rotation);
+        
 
         // Kierowanie si³¹ ci¹gu epstaina
         currentThrust += Input.GetKey(KeyCode.Space) ? maxThrust * Time.deltaTime : 0f;
@@ -50,6 +52,7 @@ public class RocinanteController : MonoBehaviour
         HandleDriftInput(KeyCode.W, Vector3.forward);
         HandleDriftInput(KeyCode.S, Vector3.back);
 
+        /*
         // Nowe sterowanie
         if (Input.GetMouseButton(1))
         {
@@ -57,6 +60,7 @@ public class RocinanteController : MonoBehaviour
             Vector3 rotationMouse = new Vector3(-mouseY, mouseX, 0f) * rotationSpeed;
             transform.Rotate(rotationMouse);
         }
+        */
 
         // Kierowanie si³¹ ci¹gu epstaina
         if (Input.GetKeyDown(KeyCode.Space))
@@ -71,17 +75,23 @@ public class RocinanteController : MonoBehaviour
 
         if (isBoosting)
         {
-            // Zwiêkszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c myszk¹ do góry
-            if (Input.GetKey(KeyCode.LeftShift) && mouseY > 0)
+           
+            // Zwiêkszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c pokrêt³em myszy do góry
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
             {
                 currentThrust += throttleIncrement;
             }
-            // Zmniejszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c myszk¹ w dó³
-            else if (Input.GetKey(KeyCode.LeftShift) && mouseY < 0)
+
+            // Zmniejszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c pokrêt³em myszy w dó³
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
             {
                 currentThrust -= throttleIncrement;
             }
+
+
         }
+
+
     }
 
     void HandleDriftInput(KeyCode key, Vector3 direction)
