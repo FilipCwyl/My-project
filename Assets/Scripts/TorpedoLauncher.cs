@@ -4,21 +4,13 @@ using UnityEngine;
 
 public class TorpedoLauncher : MonoBehaviour
 {
-    public GameObject torpedo; // Prefabrykat torpedy
-    public Transform launchPoint; // Punkt startowy torpedy
+    public GameObject torpedoPrefab;
+    public Transform launchPoint;
+    public TargetSelector targetSelector;
 
-    void Start()
-    {
-        // Przypisz transformacjê statku jako punkt startowy torpedy
-        launchPoint = transform; // Ustaw bie¿¹c¹ transformacjê jako punkt startowy
-    }
-
-    public float torpedoSpeed = 10f; // Prêdkoœæ torpedy
-    
     void Update()
     {
-        // SprawdŸ, czy gracz chce wystrzeliæ torpedê
-        if (Input.GetMouseButtonDown(0)) // Przyk³adowy klawisz (mo¿esz zmieniæ)
+        if (Input.GetKeyDown(KeyCode.B))
         {
             LaunchTorpedo();
         }
@@ -26,14 +18,40 @@ public class TorpedoLauncher : MonoBehaviour
 
     void LaunchTorpedo()
     {
-        // Wystrzelenie torpedy
-        GameObject newTorpedo = Instantiate(torpedo, launchPoint.position, launchPoint.rotation);
-        Rigidbody torpedoRB = newTorpedo.GetComponent<Rigidbody>();
-
-        // Nadaj torpedzie prêdkoœæ w kierunku, w którym patrzy launcher
-        if (torpedoRB != null)
+        if (torpedoPrefab == null)
         {
-            torpedoRB.velocity = launchPoint.forward * torpedoSpeed;
+            Debug.LogError("Torpedo prefab is not assigned!");
+            return;
+        }
+
+        GameObject torpedo = Instantiate(torpedoPrefab, launchPoint.position, launchPoint.rotation);
+
+        torpedo.transform.Rotate(90f, 90f, 0f);  // Torpedo prefab rotation in transform, Adjust values based on your needs
+
+        HomingTorpedo homingTorpedo = torpedo.GetComponent<HomingTorpedo>();
+        if (homingTorpedo == null)
+        {
+            Debug.LogError("HomingTorpedo script is missing from the torpedoPrefab!");
+            return;
+        }
+
+        if (targetSelector == null)
+        {
+            Debug.LogError("TargetSelector is not assigned in the TorpedoLauncher!");
+            return;
+        }
+
+        Transform target = targetSelector.GetSelectedTarget();
+        if (target != null)
+        {
+            homingTorpedo.SetTarget(target);
+            Debug.Log("Target selected: " + target.name);
+        }
+        else
+        {
+            Debug.LogWarning("No target selected.");
         }
     }
+
+
 }
