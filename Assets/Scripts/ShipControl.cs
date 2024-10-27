@@ -32,16 +32,14 @@ public class RocinanteController : MonoBehaviour
 
     void HandleUserInput()
     {
-        
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
         // Obrót statku
         Vector3 rotation = new Vector3(-mouseY, mouseX, 0f) * rotationSpeed;
-        transform.Rotate(rotation);
-        
+        transform.Rotate(rotation); // Obrót statku przy u¿yciu myszy
 
-        // Kierowanie si³¹ ci¹gu epstaina
+        // Kierowanie si³¹ ci¹gu Epsteina
         currentThrust += Input.GetKey(KeyCode.Space) ? maxThrust * Time.deltaTime : 0f;
 
         // Kontrola dryfu statku
@@ -52,17 +50,19 @@ public class RocinanteController : MonoBehaviour
         HandleDriftInput(KeyCode.W, Vector3.forward);
         HandleDriftInput(KeyCode.S, Vector3.back);
 
-        
-        // Nowe sterowanie
-        if (Input.GetMouseButton(1))
+        // Nowe sterowanie obrotem statku
+        if (Input.GetKeyDown(KeyCode.Keypad0)) // Przycisk 0 na klawiaturze numerycznej
         {
-            // Obrót statku tylko po wciœniêciu prawego przycisku myszy
-            Vector3 rotationMouse = new Vector3(-mouseY, mouseX, 0f) * rotationSpeed;
-            transform.Rotate(rotationMouse);
+            // Obrót statku w prawo
+            rb.AddTorque(Vector3.up * rotationSpeed, ForceMode.VelocityChange);
         }
-        
+        else if (Input.GetKeyDown(KeyCode.KeypadPeriod)) // Przycisk . na klawiaturze numerycznej
+        {
+            // Obrót statku w lewo
+            rb.AddTorque(Vector3.up * -rotationSpeed, ForceMode.VelocityChange);
+        }
 
-        // Kierowanie si³¹ ci¹gu epstaina
+        // Kierowanie si³¹ ci¹gu Epsteina
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isBoosting = true;
@@ -75,23 +75,18 @@ public class RocinanteController : MonoBehaviour
 
         if (isBoosting)
         {
-           
             // Zwiêkszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c pokrêt³em myszy do góry
-            if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+            if (Input.GetKeyDown(KeyCode.KeypadPlus)) // Przycisk + na klawiaturze numerycznej
             {
                 currentThrust += throttleIncrement;
             }
 
             // Zmniejszanie ci¹gu przytrzymuj¹c Shift i poruszaj¹c pokrêt³em myszy w dó³
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+            else if (Input.GetKeyDown(KeyCode.KeypadMinus)) // Przycisk - na klawiaturze numerycznej
             {
                 currentThrust -= throttleIncrement;
             }
-
-
         }
-
-
     }
 
     void HandleDriftInput(KeyCode key, Vector3 direction)
