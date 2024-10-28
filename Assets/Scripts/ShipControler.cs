@@ -11,31 +11,30 @@ public class RocinanteController : MonoBehaviour
     public float rotationSpeed = 2f;
     public float maneuveringThrust = 5f;
     public float throttleIncrement = 1f / 3f;
-    public Transform cameraTransform; // Referencja do transformacji kamery
-    public TMP_Text speedometerText; // Referencja do tekstu prędkościomierza
-    public TMP_Text accelerationText; // Referencja do tekstu akcelerometru
-
+    public Transform cameraTransform; 
+    public TMP_Text speedometerText; 
+    public TMP_Text accelerationText; 
     private Rigidbody rb;
     private float currentThrust = 0f;
     private bool isBoosting = false;
-    private Vector3 lastVelocity; // Do obliczenia akceleracji
+    private Vector3 lastVelocity; // To calculate acceleration
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.mass = shipMass;
-        lastVelocity = rb.velocity; // Inicjalizacja prędkości
+        lastVelocity = rb.velocity; 
     }
 
     void Update()
     {
         HandleUserInput();
 
-        // Oblicz prędkość w km/h
+        // Speedometer km/h
         float speedInKmH = rb.velocity.magnitude * 3.6f;
         speedometerText.text = "Speed: " + speedInKmH.ToString("F2") + " km/h";
 
-        // Oblicz przyspieszenie w G
+        // Acceleration in Gs
         Vector3 currentVelocity = rb.velocity;
         float accelerationInG = (currentVelocity - lastVelocity).magnitude / (9.81f * Time.deltaTime);
         lastVelocity = currentVelocity;
@@ -46,15 +45,13 @@ public class RocinanteController : MonoBehaviour
     {
         ApplyPhysics();
     
-
-        // Debugowanie aktualnej wartości ciągu
-        Debug.Log("Aktualna siła ciągu: " + currentThrust);
+             Debug.Log("Acelleration force: " + currentThrust);
     }
 
     void HandleUserInput()
     {
-        // Obrót statku za pomocą myszy, tylko jeśli lewy przycisk myszy jest wciśnięty
-        if (Input.GetMouseButton(1)) // Prawy przycisk myszy
+        //rotating of ship
+        if (Input.GetMouseButton(1))
         {
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
@@ -63,43 +60,45 @@ public class RocinanteController : MonoBehaviour
             transform.Rotate(rotation);
         }
 
-        // Kierowanie siłą ciągu Epsteina
+        // Main Drive Control
         currentThrust += Input.GetKey(KeyCode.Space) ? maxThrust * Time.deltaTime : 0f;
 
-        // Sprawdzenie czy silnik Epsteina jest włączony
+        // Testing of Main Drive
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isBoosting = true;
-            Debug.Log("Silnik Epsteina włączony.");
+            Debug.Log("Main Drive is on.");
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             isBoosting = false;
-            Debug.Log("Silnik Epsteina wyłączony.");
+            Debug.Log("Main Drive is off.");
         }
 
-        // Kontrola dryfu statku względem kierunku kamery
+        // Ship drift contol
         HandleDriftInput(KeyCode.Q, cameraTransform.up);
-        HandleDriftInput(KeyCode.E, -cameraTransform.up); // Zmiana z X na E
+        HandleDriftInput(KeyCode.E, -cameraTransform.up); 
         HandleDriftInput(KeyCode.A, -cameraTransform.right);
         HandleDriftInput(KeyCode.D, cameraTransform.right);
         HandleDriftInput(KeyCode.W, cameraTransform.forward);
         HandleDriftInput(KeyCode.S, -cameraTransform.forward);
 
-        // Nowe sterowanie obrotem statku
-        if (Input.GetKeyDown(KeyCode.Keypad0)) // Przycisk 0 na klawiaturze numerycznej
+        // Rotation of ship 
+        if (Input.GetKeyDown(KeyCode.Keypad0)) // 0 Button on Num keyboard
         {
-            // Obrót statku w prawo
+            //Right
             rb.AddTorque(Vector3.up * rotationSpeed, ForceMode.VelocityChange);
         }
-        else if (Input.GetKeyDown(KeyCode.KeypadPeriod)) // Przycisk . na klawiaturze numerycznej
+
+        else if (Input.GetKeyDown(KeyCode.KeypadPeriod)) // . Button on Num keyboard
         {
-            // Obrót statku w lewo
+            // Left
             rb.AddTorque(Vector3.up * -rotationSpeed, ForceMode.VelocityChange);
         }
 
-        // Kierowanie siłą ciągu Epsteina
+
+        // Main Drive Thrust Control
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isBoosting = true;
