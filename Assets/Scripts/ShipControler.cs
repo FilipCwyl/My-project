@@ -46,6 +46,17 @@ public class RocinanteController : MonoBehaviour
         ApplyPhysics();
     
              Debug.Log("Acelleration force: " + currentThrust);
+
+        if (isBoosting)
+        {
+            // Ustawianie aktualnej siły ciągu
+            rb.AddForce(transform.forward * currentThrust * Time.deltaTime, ForceMode.Acceleration);
+            Debug.Log("Acceleration force: " + currentThrust);
+        }
+        else
+        {
+            Debug.Log("Silnik wyłączony, siła ciągu wynosi 0");
+        }
     }
 
     void HandleUserInput()
@@ -102,7 +113,7 @@ public class RocinanteController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isBoosting = !isBoosting;
-            Debug.Log(isBoosting ? "Boosting enabled" : "Boosting disabled");
+            Debug.Log("Silnik aktywowany: " + isBoosting);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
@@ -112,23 +123,30 @@ public class RocinanteController : MonoBehaviour
 
         if (isBoosting)
         {
-            // Zwiększanie ciągu przytrzymując Shift i poruszając pokrętłem myszy do góry
-            if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetKeyDown(KeyCode.Plus)) // Added both for flexibility
+            // Adjust thrust with continuous keys for smoother increase/decrease
+            if (Input.GetKey(KeyCode.KeypadPlus) || Input.GetKey(KeyCode.Plus))
             {
-                currentThrust += throttleIncrement;
-                Debug.Log("Increased Thrust: " + currentThrust);
+                currentThrust += throttleIncrement * Time.deltaTime; // smooth adjustment
+                Debug.Log("Increasing thrust: " + currentThrust);
             }
 
-            // Zmniejszanie ciągu przytrzymując Shift i poruszając pokrętłem myszy w dół
-            else if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetKeyDown(KeyCode.Minus)) // Added both for flexibility
+            else if (Input.GetKey(KeyCode.KeypadMinus) || Input.GetKey(KeyCode.Minus))
             {
-                currentThrust -= throttleIncrement;
-                Debug.Log("Decreased Thrust: " + currentThrust);
+                currentThrust -= throttleIncrement * Time.deltaTime;
+                Debug.Log("Decreasing thrust: " + currentThrust);
             }
 
-            // Ograniczenie ciągu do maksymalnej wartości
+            // Clamp thrust
             currentThrust = Mathf.Clamp(currentThrust, 0, maxThrust);
 
+            // Apply force only when boosting is active
+            rb.AddForce(transform.forward * currentThrust, ForceMode.Force);
+        }
+
+        else
+        {
+            // Stop applying force when not boosting
+            currentThrust = 0;
         }
     }
 
