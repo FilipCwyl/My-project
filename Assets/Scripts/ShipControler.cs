@@ -101,7 +101,8 @@ public class RocinanteController : MonoBehaviour
         // Main Drive Thrust Control
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            isBoosting = true;
+            isBoosting = !isBoosting;
+            Debug.Log(isBoosting ? "Boosting enabled" : "Boosting disabled");
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
@@ -112,17 +113,17 @@ public class RocinanteController : MonoBehaviour
         if (isBoosting)
         {
             // Zwiększanie ciągu przytrzymując Shift i poruszając pokrętłem myszy do góry
-            if (Input.GetKeyDown(KeyCode.KeypadPlus)) // Przycisk + na klawiaturze numerycznej
+            if (Input.GetKeyDown(KeyCode.KeypadPlus) || Input.GetKeyDown(KeyCode.Plus)) // Added both for flexibility
             {
                 currentThrust += throttleIncrement;
-                Debug.Log("Zwiększono ciąg: " + currentThrust);
+                Debug.Log("Increased Thrust: " + currentThrust);
             }
 
             // Zmniejszanie ciągu przytrzymując Shift i poruszając pokrętłem myszy w dół
-            else if (Input.GetKeyDown(KeyCode.KeypadMinus)) // Przycisk - na klawiaturze numerycznej
+            else if (Input.GetKeyDown(KeyCode.KeypadMinus) || Input.GetKeyDown(KeyCode.Minus)) // Added both for flexibility
             {
                 currentThrust -= throttleIncrement;
-                Debug.Log("Zmniejszono ciąg: " + currentThrust);
+                Debug.Log("Decreased Thrust: " + currentThrust);
             }
 
             // Ograniczenie ciągu do maksymalnej wartości
